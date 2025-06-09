@@ -23,7 +23,7 @@ services:
     entrypoint: ["/bin/sh", "-c"]
     command:
       - |
-        IP=$(curl -s ifconfig.me) && \
+        # IP=$(curl -s ifconfig.me) && \
         echo '
         global:
           scrape_interval: 15s
