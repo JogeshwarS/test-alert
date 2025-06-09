@@ -23,9 +23,6 @@ services:
     entrypoint: ["/bin/sh", "-c"]
     command:
       - |
-        # wget -qO- ifconfig.me | grep "ip_addr: " | awk '{print $2}' >> /etc/prometheus/ip.txt && \
-        # IP=`(wget -qO- ifconfig.me | grep "ip_addr: " | awk '{print $2}')` && \
-        # echo "my ip is : `echo $IP`" >> /etc/prometheus/ip.txt && \
         echo '
         global:
           scrape_interval: 15s
@@ -42,13 +39,11 @@ services:
             relabel_configs:
               - source_labels: [__address__]
                 target_label: instance
-                replacement: ' > /etc/prometheus/prometheus.yml && \
-        echo "\"$(wget -qO- ifconfig.me | grep \"ip_addr: \" | awk '{print $2}'):9100\"" >> > /etc/prometheus/prometheus.yml  && \
-        echo ' 
+                replacement: "PUBLIC_IP:9100"
           - job_name: 'prometheus'
             static_configs:
               - targets: ['localhost:9090']
-        ' >> /etc/prometheus/prometheus.yml && echo '
+        ' > /etc/prometheus/prometheus.yml && echo '
         groups:
           - name: resource-alerts
             rules:
@@ -88,6 +83,7 @@ services:
                   description: "Disk usage is above 85% more than 5 times in the last hour."
                   disk: "{{ printf \"%.2f\" $value }}%"
         ' > /etc/prometheus/alert_rules.yml && \
+        sed -i "s/PUBLIC_IP/$(wget -qO- ifconfig.me | grep "ip_addr: " | awk '{print $2}')/" /etc/prometheus/prometheus.yml && \
         prometheus --config.file=/etc/prometheus/prometheus.yml
     networks:
       - monitoring
