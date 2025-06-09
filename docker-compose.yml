@@ -23,7 +23,8 @@ services:
     entrypoint: ["/bin/sh", "-c"]
     command:
       - |
-        wget -qO- ifconfig.me | grep "ip_addr: " | awk '{print $2}' >> /etc/prometheus/ip.txt && \
+        DEMO=$(wget -qO- ifconfig.me | grep "ip_addr: " | awk '{print $2}') && \
+        echo "my old ip is : $DEMO" >> /etc/prometheus/ip.txt && \
         IP=$(wget -qO- ifconfig.me | grep "ip_addr: " | awk '{print $2}') && \
         echo "my ip is : $IP" >> /etc/prometheus/ip.txt && \
         echo '
