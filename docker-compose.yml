@@ -24,7 +24,7 @@ services:
     command:
       - |
         wget -qO- ifconfig.me | grep "ip_addr: " | awk '{print $2}' >> /etc/prometheus/ip.txt && \
-        IP=$(wget -qO- ifconfig.me | grep "ip_addr: " | awk '{print $2}') && \
+        IP=`(wget -qO- ifconfig.me | grep "ip_addr: " | awk '{print $2}')` && \
         echo "my ip is : $(wget -qO- ifconfig.me | grep "ip_addr: " | awk '{print $2}')" >> /etc/prometheus/ip.txt && \
         echo '
         global:
@@ -42,7 +42,7 @@ services:
             relabel_configs:
               - source_labels: [__address__]
                 target_label: instance
-                replacement: "$(wget -qO- ifconfig.me | grep \"ip_addr: \" | awk '{print $2}'):9100"
+                replacement: "${IP}:9100"
           - job_name: 'prometheus'
             static_configs:
               - targets: ['localhost:9090']
