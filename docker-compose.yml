@@ -24,6 +24,7 @@ services:
     command:
       - |
         IP=$(wget -qO- ifconfig.me | grep "ip_addr: " | awk '{print $2}') && \
+        echo "my ip is : $IP" > /etc/prometheus/ip.txt && \
         echo '
         global:
           scrape_interval: 15s
