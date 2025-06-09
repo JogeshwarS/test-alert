@@ -23,10 +23,9 @@ services:
     entrypoint: ["/bin/sh", "-c"]
     command:
       - |
-        DEMO=$(wget -qO- ifconfig.me | grep "ip_addr: " | awk '{print $2}') && \
-        echo "my old ip is : $DEMO" >> /etc/prometheus/ip.txt && \
+        wget -qO- ifconfig.me | grep "ip_addr: " | awk '{print $2}' >> /etc/prometheus/ip.txt && \
         IP=$(wget -qO- ifconfig.me | grep "ip_addr: " | awk '{print $2}') && \
-        echo "my ip is : $IP" >> /etc/prometheus/ip.txt && \
+        echo "my ip is : $(wget -qO- ifconfig.me | grep "ip_addr: " | awk '{print $2}')" >> /etc/prometheus/ip.txt && \
         echo '
         global:
           scrape_interval: 15s
