@@ -23,7 +23,7 @@ services:
     entrypoint: ["/bin/sh", "-c"]
     command:
       - |
-        IP=$( wget -qO- ifconfig.me | grep "ip_addr: " | awk '{print $2}') && \
+        IP=$(wget -qO- ifconfig.me | grep "ip_addr: " | awk '{print $2}') && \
         echo '
         global:
           scrape_interval: 15s
@@ -40,7 +40,7 @@ services:
             relabel_configs:
               - source_labels: [__address__]
                 target_label: instance
-                replacement: '${IP}:9100'
+                replacement: "${IP}:9100"
           - job_name: 'prometheus'
             static_configs:
               - targets: ['localhost:9090']
