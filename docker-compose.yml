@@ -23,7 +23,7 @@ services:
     entrypoint: ["/bin/sh", "-c"]
     command:
       - |
-        # IP=$(curl -s ifconfig.me) && \
+        IP=$( wget -qO- ifconfig.me | grep "ip_addr: " | awk '{print $2}') && \
         echo '
         global:
           scrape_interval: 15s
